@@ -64,7 +64,7 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#667eea" />
         <link rel="canonical" href={siteConfig.url} />
         {/* Coinzilla 所有者验证 如果需要更换域名请修改中间内容 */}
-        <meta name="coinzilla" content="16ca70e1364cb462df3c6ded1f12225c" /> 
+        <meta name="coinzilla" content="16ca70e1364cb462df3c6ded1f12225c" />
         {/* Coinzilla 所有者验证 如果需要更换域名请修改中间内容 */}
       </head>
       <body>

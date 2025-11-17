@@ -68,6 +68,41 @@ const nextConfig = {
       ],
     };
   },
+  
+  // 🔒 HTTP Headers 配置
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          // ⭐ Permissions-Policy: 移除不支持的 browsing-topics，避免警告
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
+          },
+        ],
+      },
+      // ⚡ 静态资源缓存优化
+      {
+        source: '/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig
