@@ -7,7 +7,8 @@ import {
   addSearchKeywordsBatch,
   updateSearchKeyword,
   deleteSearchKeyword,
-  toggleSearchKeywordStatus
+  toggleSearchKeywordStatus,
+  triggerImmediateSearch
 } from './Actions'
 import styles from './search-keywords.module.css'
 
@@ -140,6 +141,21 @@ export default function SearchKeywordsPage() {
 
     const result = await deleteSearchKeyword(id)
     if (result.success) {
+      loadKeywords()
+    } else {
+      alert(result.message)
+    }
+  }
+
+  // 立即搜索（触发BotSearchCrawler立即搜索该关键词）
+  const handleImmediateSearch = async (id, keyword) => {
+    if (!confirm(`确定要立即搜索"${keyword}"吗？\n\nBotSearchCrawler 将在下一轮检查时（约60秒内）开始搜索。`)) {
+      return
+    }
+
+    const result = await triggerImmediateSearch(id)
+    if (result.success) {
+      alert(result.message)
       loadKeywords()
     } else {
       alert(result.message)
@@ -457,6 +473,13 @@ export default function SearchKeywordsPage() {
                             className={styles.editButton}
                           >
                             编辑
+                          </button>
+                          <button
+                            onClick={() => handleImmediateSearch(kw._id, kw.keyword)}
+                            className={styles.searchButton}
+                            title="触发BotSearchCrawler立即搜索此关键词"
+                          >
+                            立即搜索
                           </button>
                           <button
                             onClick={() => handleToggleStatus(kw._id, kw.status)}

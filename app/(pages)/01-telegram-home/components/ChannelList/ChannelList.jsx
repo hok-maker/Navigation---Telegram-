@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useCallback, useEffect, Suspense } from 'react';
+import React, { useState, useCallback, useEffect, Suspense } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 import ChannelCard from '../ChannelCard';
 import SearchBar from '../SearchBar';
+import { NativeAdCard } from '@/app/components/Ads';
 import { getChannelsData, searchChannels } from '../../Actions';
 import styles from './ChannelList.module.css';
 
@@ -158,8 +159,19 @@ export default function ChannelList({
       ) : (
         <>
           <div className={styles.grid}>
-            {channels.map((channel) => (
-              <ChannelCard key={channel._id} channel={channel} />
+            {channels.map((channel, index) => (
+              <React.Fragment key={channel._id}>
+                {/* 频道卡片 */}
+                <ChannelCard channel={channel} />
+                
+                {/* ⭐ 每20个频道插入1个原生广告 */}
+                {(index + 1) % 20 === 0 && (
+                  <NativeAdCard 
+                    adCode={process.env.NEXT_PUBLIC_ADSTERRA_NATIVE_CODE}
+                    position="in-feed"
+                  />
+                )}
+              </React.Fragment>
             ))}
           </div>
           

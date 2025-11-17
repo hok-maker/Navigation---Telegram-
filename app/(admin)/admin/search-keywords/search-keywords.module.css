@@ -284,6 +284,15 @@
   background: #1976D2;
 }
 
+.searchButton {
+  background: #9C27B0;
+  color: white;
+}
+
+.searchButton:hover {
+  background: #7B1FA2;
+}
+
 .toggleButton {
   background: #FF9800;
   color: white;

@@ -32,12 +32,23 @@ export async function getSearchKeywords() {
       .sort({ priority: 1, createdAt: -1 })
       .toArray()
 
-    // 统计
+    // ⭐ 统计（方案1：基于搜索历史）
     const stats = {
       total: keywords.length,
+      
+      // 启用中的关键词
       active: keywords.filter((k) => k.status === 'active').length,
-      pending: keywords.filter((k) => k.status === 'pending').length,
-      completed: keywords.filter((k) => k.status === 'completed').length
+      
+      // 待搜索 = 从未搜索过的（不管状态）
+      pending: keywords.filter((k) => 
+        k.schedule?.lastSearchAt === null || 
+        !k.schedule?.lastSearchAt
+      ).length,
+      
+      // 已完成 = 至少搜索过一次的
+      completed: keywords.filter((k) => 
+        k.schedule?.lastSearchAt !== null
+      ).length
     }
 
     // 转换 _id 为字符串
@@ -296,6 +307,44 @@ export async function deleteSearchKeyword(id) {
     return { success: true, message: '删除成功' }
   } catch (error) {
     console.error('删除搜索关键词失败:', error)
+    return { success: false, message: error.message }
+  }
+}
+
+/**
+ * 触发立即搜索（设置 nextSearchAt 为当前时间）
+ * @param {String} id - 关键词ID
+ */
+export async function triggerImmediateSearch(id) {
+  try {
+    const client = await connectDB()
+    const db = client.db(DB_NAME)
+
+    const keyword = await db
+      .collection('searchKeywords')
+      .findOne({ _id: new ObjectId(id) })
+
+    if (!keyword) {
+      return { success: false, message: '关键词不存在' }
+    }
+
+    // ⭐ 设置下次搜索时间为当前时间，BotSearchCrawler 会在下一轮检查时立即搜索
+    await db.collection('searchKeywords').updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          'schedule.nextSearchAt': new Date(),  // 立即搜索
+          updatedAt: new Date()
+        }
+      }
+    )
+
+    return {
+      success: true,
+      message: `已将"${keyword.keyword}"加入搜索队列，BotSearchCrawler 将在下一轮检查时搜索（约60秒内）`
+    }
+  } catch (error) {
+    console.error('触发立即搜索失败:', error)
     return { success: false, message: error.message }
   }
 }
