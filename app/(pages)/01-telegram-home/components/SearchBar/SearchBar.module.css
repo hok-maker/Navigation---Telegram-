@@ -1,0 +1,105 @@
+.searchBar {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.searchForm {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 15px 50px 15px 20px;
+  font-size: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.searchInput:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.searchInput:disabled {
+  background: var(--bg-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.clearButton {
+  position: absolute;
+  right: 130px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: color 0.2s ease;
+}
+
+.clearButton:hover {
+  color: var(--text-secondary);
+}
+
+.clearButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.searchButton {
+  position: absolute;
+  right: 5px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.searchButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.searchButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .searchForm {
+    max-width: 100%;
+  }
+
+  .searchInput {
+    padding: 12px 110px 12px 15px;
+    font-size: 14px;
+  }
+
+  .clearButton {
+    right: 100px;
+    font-size: 18px;
+  }
+
+  .searchButton {
+    padding: 8px 15px;
+    font-size: 13px;
+  }
+}
+

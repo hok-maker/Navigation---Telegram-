@@ -1,0 +1,137 @@
+.errorContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.errorCard {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.errorIcon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px) rotate(-5deg); }
+  75% { transform: translateX(10px) rotate(5deg); }
+}
+
+.errorTitle {
+  font-size: 1.8rem;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.errorMessage {
+  color: #718096;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.errorDetails {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+}
+
+.errorDetails summary {
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  user-select: none;
+}
+
+.errorDetails summary:hover {
+  color: #2d3748;
+}
+
+.errorStack {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #e53e3e;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 200px;
+}
+
+.errorActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.primaryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.secondaryButton {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.secondaryButton:hover {
+  background: #cbd5e0;
+  transform: translateY(-2px);
+}
+
+.errorHint {
+  font-size: 0.875rem;
+  color: #a0aec0;
+  margin-top: 1rem;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .errorCard {
+    padding: 2rem 1.5rem;
+  }
+  
+  .errorTitle {
+    font-size: 1.5rem;
+  }
+  
+  .errorActions {
+    flex-direction: column;
+  }
+  
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+}
+

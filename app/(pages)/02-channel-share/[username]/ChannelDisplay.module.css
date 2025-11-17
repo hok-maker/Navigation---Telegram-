@@ -1,0 +1,263 @@
+/* 频道卡片 */
+.channelCard {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2rem 1.5rem 1.5rem;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* 头像区域 */
+.avatarWrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #667eea;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
+}
+
+.avatarPlaceholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  border: 3px solid #667eea;
+  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
+}
+
+.verifiedBadge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  background: #1da1f2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+  border: 3px solid var(--card-bg);
+}
+
+/* 频道信息 */
+.channelInfo {
+  margin-bottom: 1.5rem;
+}
+
+.channelName {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.3rem 0;
+}
+
+.channelUsername {
+  font-size: 0.95rem;
+  color: var(--text-tertiary);
+  margin: 0 0 1rem 0;
+}
+
+/* 订阅数 */
+.subscribers {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 50px;
+  margin-bottom: 1rem;
+}
+
+.subscribersIcon {
+  font-size: 1rem;
+}
+
+.subscribersCount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.subscribersLabel {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0.8rem 0 0 0;
+  text-align: center;
+}
+
+/* 点赞按钮 */
+.likeButton {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.likeButton:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+}
+
+.likeButton:active:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.likeButton.liked {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  cursor: default;
+}
+
+.likeButton.liking {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.likeIcon {
+  font-size: 1.6rem;
+}
+
+.likeText {
+  flex: 1;
+  text-align: left;
+}
+
+.likeCount {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.7rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+}
+
+/* 点赞动画 */
+@keyframes likeAnimation {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.likeButton.likeAnimation {
+  animation: likeAnimation 0.6s ease;
+}
+
+/* 打开频道按钮 */
+.openButton {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: #667eea;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.openButton:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.openIcon {
+  font-size: 1.1rem;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .channelCard {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+
+  .avatarWrapper {
+    width: 80px;
+    height: 80px;
+  }
+
+  .avatar,
+  .avatarPlaceholder {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  .verifiedBadge {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  .channelName {
+    font-size: 1.6rem;
+  }
+
+  .channelUsername {
+    font-size: 1rem;
+  }
+
+  .subscribersCount {
+    font-size: 1.3rem;
+  }
+
+  .description {
+    font-size: 0.95rem;
+  }
+
+  .likeButton {
+    padding: 1.2rem 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .likeIcon {
+    font-size: 1.6rem;
+  }
+
+  .openButton {
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+

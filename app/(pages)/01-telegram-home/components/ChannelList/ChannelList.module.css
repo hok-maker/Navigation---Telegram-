@@ -1,0 +1,121 @@
+.container {
+  width: 100%;
+}
+
+/* ⭐ 搜索栏加载状态 */
+.searchBarLoading {
+  text-align: center;
+  padding: 15px;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+/* 搜索结果信息 */
+.resultInfo {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 30px;
+  font-size: 16px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.resultInfo strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.noResult {
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+/* 频道网格 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-tertiary);
+}
+
+.empty p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: var(--text-secondary);
+}
+
+.hint {
+  font-size: 14px !important;
+  color: var(--text-tertiary) !important;
+}
+
+/* 无限滚动触发器 */
+.loadingTrigger {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #667eea;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loadMore {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  padding: 20px;
+}
+
+/* 已到底部 */
+.end {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-tertiary);
+  font-size: 16px;
+}
+
+.end span {
+  margin-right: 5px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .resultInfo {
+    font-size: 14px;
+    padding: 15px;
+  }
+}
+

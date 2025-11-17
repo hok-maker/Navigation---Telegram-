@@ -1,0 +1,615 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+/* ⭐ 暗黑模式下的渐变背景 */
+:global(html.dark-mode) .container {
+  background: linear-gradient(135deg, #2d3a5f 0%, #3d2d52 100%);
+}
+
+/* 页面头部 */
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  color: white;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.subtitle {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* 主要内容区 */
+.main {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* 通用卡片样式 */
+.section {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 40px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+}
+
+/* 章节头部 */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.sectionIcon {
+  width: 32px;
+  height: 32px;
+  color: #667eea;
+}
+
+.sectionTitle {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* 章节内容 */
+.sectionContent {
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.sectionContent p {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.sectionContent strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* 子标题 */
+.subTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 24px 0 16px 0;
+}
+
+/* 特性列表 */
+.featureList {
+  margin: 24px 0;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  font-size: 16px;
+}
+
+.featureDot {
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 提示框 */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: rgba(243, 156, 18, 0.1);
+  border-left: 4px solid #f39c12;
+  border-radius: 8px;
+  margin-top: 24px;
+}
+
+.noticeIcon {
+  width: 24px;
+  height: 24px;
+  color: #f39c12;
+  flex-shrink: 0;
+}
+
+/* ⭐ 暗黑模式下的提示框 */
+:global(html.dark-mode) .notice {
+  background: rgba(243, 156, 18, 0.15);
+}
+
+/* 因素分组 */
+.factorGroup {
+  margin: 32px 0;
+}
+
+.factorTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.factorList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.factorItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+.factorLabel {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.factorDesc {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* 警告框 */
+.warningBox {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(229, 62, 62, 0.1);
+  border-left: 4px solid #e53e3e;
+  border-radius: 8px;
+  margin-top: 32px;
+}
+
+.warningIcon {
+  width: 28px;
+  height: 28px;
+  color: #e53e3e;
+  flex-shrink: 0;
+}
+
+.warningTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+/* ⭐ 暗黑模式下的警告框 */
+:global(html.dark-mode) .warningBox {
+  background: rgba(229, 62, 62, 0.15);
+}
+
+.warningDesc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.warningList {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.warningList li {
+  margin-bottom: 8px;
+}
+
+/* 异常案例 */
+.abnormalCase {
+  margin: 20px 0;
+  padding: 16px;
+  background: rgba(229, 62, 62, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid #e53e3e;
+}
+
+.abnormalCase h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.abnormalCase p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ⭐ 暗黑模式下的异常案例 */
+:global(html.dark-mode) .abnormalCase {
+  background: rgba(229, 62, 62, 0.08);
+}
+
+/* 惩罚说明 */
+.penaltyNote {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+}
+
+.penaltyNote > strong {
+  font-size: 17px;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.mechanismDesc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin: 12px 0 16px 0;
+  line-height: 1.7;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: 6px;
+}
+
+.mechanismDesc strong {
+  color: var(--text-primary);
+}
+
+.penaltyNote ul {
+  margin: 16px 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.penaltyNote li {
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+.penaltyNote li strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.mechanismNote {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 16px 0 0 0;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.05);
+  border-radius: 6px;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+/* 标准框 */
+.criteriaBox {
+  padding: 24px;
+  background: var(--bg-tertiary);
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.criteriaTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.criteriaList {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.criteriaList li {
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+.criteriaList li strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* 提示网格 */
+.tipsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.tipBox {
+  padding: 24px;
+  background: var(--bg-tertiary);
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+}
+
+.tipTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.tipList {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.tipList li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.tipList li strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* 重要提示框 */
+.importantNote {
+  margin-top: 32px;
+  padding: 24px;
+  background: rgba(245, 158, 11, 0.15);
+  border-left: 4px solid #f59e0b;
+  border-radius: 12px;
+}
+
+.importantNote h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+}
+
+.importantNote p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.8;
+}
+
+.importantNote p:last-child {
+  margin-bottom: 0;
+}
+
+.importantNote strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.importantNote ul {
+  margin: 16px 0 0 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.importantNote li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+/* 分享示例框 */
+.shareExampleBox {
+  margin-top: 32px;
+  padding: 28px;
+  background: rgba(102, 126, 234, 0.15);
+  border-left: 4px solid #667eea;
+  border-radius: 12px;
+}
+
+.shareExampleBox h4 {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+}
+
+.shareExampleBox > p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.8;
+}
+
+.exampleSection h5 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.exampleSection ol {
+  margin: 0 0 24px 0;
+  padding-left: 24px;
+  color: var(--text-secondary);
+}
+
+.exampleSection li {
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+
+.exampleSection code {
+  background: rgba(102, 126, 234, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.exampleDemo {
+  margin: 20px 0;
+  padding: 20px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.exampleDemo p {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.demoLink {
+  display: inline-block;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.demoLink:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.exampleNote {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+.tipsNote {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.tipsNote strong {
+  font-size: 15px;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.tipsNote ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-secondary);
+}
+
+.tipsNote li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* 联系框 */
+.contactBox {
+  text-align: center;
+  padding: 32px;
+  background: rgba(102, 126, 234, 0.08);
+  border-radius: 12px;
+}
+
+.contactBox h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.contactBox p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* 页脚 */
+.footer {
+  text-align: center;
+  margin-top: 60px;
+  color: white;
+}
+
+.backLink {
+  display: inline-block;
+  padding: 12px 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.backLink:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateX(-4px);
+}
+
+.disclaimer {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .title {
+    font-size: 32px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .section {
+    padding: 24px 20px;
+  }
+
+  .sectionTitle {
+    font-size: 24px;
+  }
+
+  .criteriaGrid,
+  .tipsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .warningBox {
+    flex-direction: column;
+  }
+}
+

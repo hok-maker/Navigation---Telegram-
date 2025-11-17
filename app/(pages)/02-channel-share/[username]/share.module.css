@@ -1,0 +1,65 @@
+/* ⭐ 极简容器 - 纯净背景 */
+.container {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+/* ⭐ 暗黑模式下的渐变背景 */
+:global(html.dark-mode) .container {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d3d 100%);
+}
+
+/* ⭐ 主体内容 - 完全居中 */
+.main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+}
+
+/* ⭐ 单一水印 - 右下角固定，极淡显示 */
+.watermark {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.08);
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+/* ⭐ 暗黑模式下的水印 */
+:global(html.dark-mode) .watermark {
+  color: rgba(255, 255, 255, 0.08);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .main {
+    padding: 1.5rem 1rem;
+    gap: 1.2rem;
+  }
+
+  .watermark {
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    opacity: 0.5;
+  }
+}
+

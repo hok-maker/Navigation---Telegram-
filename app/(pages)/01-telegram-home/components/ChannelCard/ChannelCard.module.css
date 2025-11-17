@@ -1,0 +1,464 @@
+/* ⭐ 卡片（整个卡片可点击 + 悬停效果） */
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  height: 100%;
+  border: 1px solid var(--border-color);
+  /* ⭐ 核心修复：防止内容溢出撑大卡片 */
+  overflow: hidden;
+}
+
+/* ⭐ 悬停效果 */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  background: var(--card-hover-bg);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.card:active {
+  transform: translateY(-2px);
+}
+
+/* ⭐ 右上角按钮组（分享 + 点赞） */
+.topActions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* 按钮包装器（用于 tooltip） */
+.buttonWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 分享按钮 */
+.shareButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.shareButton:hover {
+  background: #667eea;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.shareButton:active {
+  transform: scale(0.95);
+}
+
+/* Tooltip 提示框 */
+.tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+/* Tooltip 箭头 */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.85);
+}
+
+/* 悬停时显示 tooltip */
+.buttonWrapper:hover .tooltip {
+  opacity: 1;
+}
+
+/* 头部（横向布局） */
+.header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  flex: 1;
+  margin-bottom: 10px;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* ⭐ 不再需要 z-index，因为与 placeholder 互斥渲染 */
+}
+
+.avatarPlaceholder {
+  /* ⭐ 改为相对定位，与 avatar 互斥显示（不再层叠） */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  /* background 由 inline style 动态设置（渐变色） */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  user-select: none;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.verified {
+  color: #1da1f2;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* 描述（紧贴名称下方，2行） */
+.description {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 4px 0 0 0;
+  overflow: hidden;
+  display: -webkit-box;
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2; /* 标准属性（向后兼容） */
+  word-break: break-word;
+  text-overflow: ellipsis;
+}
+
+/* 底部（订阅数） */
+.footer {
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: auto;
+}
+
+/* 订阅数（底部显示） */
+.members {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.membersIcon {
+  font-size: 15px;
+  opacity: 0.7;
+}
+
+.membersCount {
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .card {
+    padding: 12px;
+  }
+  
+  /* ⭐ 修复：禁用移动端hover效果，避免触摸后样式"粘住" */
+  .card:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+    background: var(--card-bg);
+    border-color: var(--border-color);
+  }
+  
+  /* ⭐ 移动端点击时的反馈效果（替代hover） */
+  .card:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+
+  .avatarWrapper,
+  .avatar,
+  .avatarPlaceholder {
+    width: 42px;
+    height: 42px;
+  }
+
+  .avatarPlaceholder {
+    font-size: 18px;
+  }
+
+  .name {
+    font-size: 14px;
+  }
+
+  .description {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .membersCount {
+    font-size: 13px;
+  }
+
+  .topActions {
+    top: 6px;
+    right: 6px;
+    gap: 4px;
+  }
+
+  .shareButton {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+  
+  .footer {
+    padding-top: 6px;
+  }
+}
+
+/* ⭐ 分享成功提示框（居中显示 + 背景遮罩） */
+.shareToast {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.toastContent {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 420px;
+  border: 2px solid #667eea;
+  position: relative;
+  cursor: default;
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.toastIcon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.toastText {
+  flex: 1;
+}
+
+.toastTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.toastChannel {
+  font-size: 14px;
+  color: #667eea;
+  font-weight: 600;
+  margin-bottom: 12px;
+  padding: 4px 8px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.toastDesc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.tipItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tipIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.tipItem strong {
+  color: #667eea;
+  font-weight: 700;
+}
+
+.sharePrompt {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color);
+  text-align: center;
+}
+
+.shareTitle {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.shareTags {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.toastClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  line-height: 1;
+}
+
+.toastClose:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .toastContent {
+    max-width: 90vw;
+    padding: 16px;
+  }
+
+  .toastIcon {
+    font-size: 28px;
+  }
+
+  .toastTitle {
+    font-size: 16px;
+  }
+
+  .toastChannel {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .toastDesc {
+    font-size: 13px;
+  }
+
+  .tipIcon {
+    font-size: 16px;
+  }
+
+  .shareTitle {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+
+  .shareTags {
+    font-size: 12px;
+  }
+}
+

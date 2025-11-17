@@ -1,0 +1,263 @@
+/* 弹窗遮罩 */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+  to {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* 弹窗内容 */
+.modalContent {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 24px;
+  max-width: 420px;
+  width: 90%;
+  border: 2px solid #667eea;
+  position: relative;
+  cursor: default;
+  animation: scaleIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 关闭按钮 */
+.closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  line-height: 1;
+}
+
+.closeButton:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* 头部 */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* 频道信息 */
+.channelInfo {
+  font-size: 14px;
+  color: #667eea;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding: 6px 12px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* 提示列表 */
+.tips {
+  margin-bottom: 16px;
+}
+
+.tipItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.tipIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.tipItem strong {
+  color: #667eea;
+  font-weight: 700;
+}
+
+/* 分享区域 */
+.share {
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-color);
+  text-align: center;
+}
+
+.shareTitle {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.sharePlatforms {
+  font-size: 13px;
+  color: #667eea;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+/* 操作按钮组 */
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.shareButton,
+.exploreButton {
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  border: none;
+}
+
+.shareButton {
+  background: var(--card-bg);
+  border: 2px solid #667eea;
+  color: #667eea;
+}
+
+.shareButton:hover:not(:disabled) {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.shareButton.copied {
+  background: #10b981;
+  border-color: #10b981;
+  color: white;
+  cursor: default;
+}
+
+.shareButton:disabled {
+  opacity: 1;
+}
+
+.exploreButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.exploreButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.icon {
+  font-size: 1rem;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .modalContent {
+    max-width: 90vw;
+    padding: 20px;
+  }
+
+  .icon {
+    font-size: 28px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .channelInfo {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .tipItem {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .tipIcon {
+    font-size: 16px;
+  }
+
+  .shareTitle {
+    font-size: 11px;
+  }
+
+  .sharePlatforms {
+    font-size: 12px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  .shareButton,
+  .exploreButton {
+    padding: 0.8rem 1rem;
+  }
+}

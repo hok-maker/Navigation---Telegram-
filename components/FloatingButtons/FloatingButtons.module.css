@@ -1,0 +1,160 @@
+.container {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* 按钮列表 */
+.buttonList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 按钮包装器（用于悬停提示） */
+.buttonWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* 通用按钮样式 */
+.button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+/* 悬停提示 */
+.tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid rgba(0, 0, 0, 0.85);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+.buttonWrapper:hover .tooltip {
+  opacity: 1;
+}
+
+/* 图标样式 */
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* 主按钮（展开/收起） */
+.mainButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+.mainButton.active {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* 特定按钮颜色 */
+.scrollTop {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+}
+
+.scrollTop:hover {
+  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+}
+
+.darkMode {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  box-shadow: 0 4px 12px rgba(250, 112, 154, 0.4);
+}
+
+.darkMode:hover {
+  box-shadow: 0 6px 20px rgba(250, 112, 154, 0.6);
+}
+
+.about {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  box-shadow: 0 4px 12px rgba(168, 237, 234, 0.4);
+}
+
+.about:hover {
+  box-shadow: 0 6px 20px rgba(168, 237, 234, 0.6);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .button {
+    width: 48px;
+    height: 48px;
+  }
+
+  .icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+

@@ -1,0 +1,67 @@
+{
+  "exportMode": "all",
+  "exportTime": "2025-11-16T03:21:04.936Z",
+  "totalChannels": 163908,
+  "files": {
+    "json": "channel_usernames_all_2025-11-16.json",
+    "txt": "channel_usernames_all_2025-11-16.txt"
+  },
+  "subscriberStats": {
+    "total": 2032498913,
+    "max": 13268977,
+    "min": 0,
+    "avg": 12400
+  },
+  "topChannels": [
+    {
+      "username": "telegramtips",
+      "name": "Telegram Tips",
+      "members": 13268977
+    },
+    {
+      "username": "telegram",
+      "name": "Telegram News",
+      "members": 11617903
+    },
+    {
+      "username": "durov",
+      "name": "Pavel Durov",
+      "members": 10868161
+    },
+    {
+      "username": "toncoin",
+      "name": "Toncoin",
+      "members": 9167639
+    },
+    {
+      "username": "proxymtproto",
+      "name": "Proxy MTProto",
+      "members": 8844086
+    },
+    {
+      "username": "premium",
+      "name": "Telegram Premium",
+      "members": 8429697
+    },
+    {
+      "username": "hotonnear",
+      "name": "HOT Updates",
+      "members": 6811414
+    },
+    {
+      "username": "akhbarefori",
+      "name": "خبرفوری",
+      "members": 6158804
+    },
+    {
+      "username": "khabarfouri",
+      "name": "خبرفوری",
+      "members": 6110802
+    },
+    {
+      "username": "iroproxy",
+      "name": "iRo Proxy | پروکسی",
+      "members": 5974412
+    }
+  ]
+}

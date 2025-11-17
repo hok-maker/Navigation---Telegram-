@@ -1,0 +1,436 @@
+.container {
+  max-width: 100%;
+}
+
+/* 统计栏 */
+.statsBar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.statItem {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.statValue {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 工具栏 */
+.toolbar {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.searchForm {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.searchButton {
+  padding: 10px 24px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.searchButton:hover {
+  background: #5568d3;
+}
+
+.clearButton {
+  padding: 10px 20px;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.clearButton:hover {
+  background: #e0e0e0;
+}
+
+/* ⭐ 添加频道按钮 */
+.addButton {
+  padding: 10px 24px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.addButton:hover {
+  background: #059669;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox span {
+  font-size: 15px;
+  color: #333;
+}
+
+/* 频道网格 */
+.channelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f0f0f0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 空状态 */
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty p {
+  font-size: 18px;
+  margin: 0;
+}
+
+/* 加载更多 */
+.loadMoreContainer {
+  text-align: center;
+  padding: 20px;
+}
+
+.loadMoreButton {
+  padding: 12px 32px;
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.loadMoreButton:hover:not(:disabled) {
+  background: #667eea;
+  color: white;
+}
+
+.loadMoreButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ⭐ 排序选择器 */
+.sortSelector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.sortSelector label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.sortSelect {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.sortSelect:hover {
+  border-color: #667eea;
+}
+
+.sortSelect:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* ⭐ 状态提示栏 */
+.statusBar {
+  display: flex;
+  gap: 16px;
+  padding: 12px 20px;
+  background: #f0f4ff;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.statusItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.statusItem strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* ⭐ 批量操作按钮 */
+.batchButton {
+  padding: 10px 20px;
+  background: #f8f9fa;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.batchButton:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.batchButtonActive {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.batchButtonActive:hover {
+  background: #5568d3;
+}
+
+/* ⭐ 批量操作工具栏 */
+.batchToolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.batchInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.selectAllButton {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.selectAllButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.selectionCount {
+  color: white;
+  font-size: 14px;
+}
+
+.selectionCount strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.batchActions {
+  display: flex;
+  gap: 12px;
+}
+
+.demoteButton {
+  padding: 10px 20px;
+  background: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #667eea;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.demoteButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.demoteButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ⭐ 频道卡片包装器（支持多选） */
+.channelCardWrapper {
+  position: relative;
+  transition: all 0.2s;
+}
+
+.channelCardWrapper.selectionMode {
+  cursor: pointer;
+}
+
+.channelCardWrapper.selectionMode:hover {
+  transform: translateY(-2px);
+}
+
+.channelCardWrapper.selected {
+  outline: 3px solid #667eea;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.checkboxOverlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.selectionCheckbox {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchForm {
+    min-width: 100%;
+  }
+
+  .sortSelector {
+    justify-content: space-between;
+  }
+
+  .channelGrid {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -1,0 +1,90 @@
+.likeButton {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.likeButton:hover:not(:disabled) {
+  border-color: #ff6b6b;
+  transform: scale(1.05);
+}
+
+.likeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.likeButton.liked {
+  background: #ffe0e0;
+  border-color: #ff6b6b;
+}
+
+.icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.count {
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 20px;
+  text-align: center;
+}
+
+.likeButton.liked .count {
+  color: #ff6b6b;
+}
+
+/* 点击动画 */
+.likeButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* 按钮包装器（用于 tooltip） */
+.buttonWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Tooltip 提示框 */
+.tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+/* Tooltip 箭头 */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-left-color: rgba(0, 0, 0, 0.85);
+}
+
+/* 悬停时显示 tooltip */
+.buttonWrapper:hover .tooltip {
+  opacity: 1;
+}
+
