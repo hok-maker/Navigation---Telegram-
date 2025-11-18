@@ -2,14 +2,15 @@
 .nativeAdCard {
   background: var(--card-bg);
   border-radius: 10px;
-  padding: 14px;
+  padding: 10px;
   box-shadow: var(--shadow-sm);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   position: relative;
   border: 1px solid var(--border-color);
-  min-height: 160px;
+  min-height: 140px; /* 缩小高度，更紧凑 */
+  max-height: 200px; /* 限制最大高度，防止过高 */
   overflow: hidden;
 }
 
@@ -55,7 +56,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 140px;
+  min-height: 140px; /* 缩小高度，更紧凑 */
+  overflow: hidden; /* 防止内容溢出 */
 }
 
 /* 占位符（广告加载前显示） */
@@ -82,8 +84,13 @@
 /* 响应式 */
 @media (max-width: 768px) {
   .nativeAdCard {
-    padding: 12px;
-    min-height: 140px;
+    padding: 8px;
+    min-height: 120px; /* 移动端更紧凑 */
+    max-height: 180px;
+  }
+
+  .adContent {
+    min-height: 120px;
   }
 
   .sponsorBadge {

@@ -164,11 +164,11 @@ export default function ChannelList({
                 {/* 频道卡片 */}
                 <ChannelCard channel={channel} />
                 
-                {/* ⭐ 每20个频道插入1个原生广告 */}
-                {(index + 1) % 20 === 0 && (
+                {/* ⭐ 每17个频道插入1个原生广告（使用唯一 ID） */}
+                {(index + 1) % 17 === 0 && (
                   <NativeAdCard 
-                    adCode={process.env.NEXT_PUBLIC_ADSTERRA_NATIVE_CODE}
-                    position="in-feed"
+                    adId={`ad-${Math.floor((index + 1) / 17)}`} 
+                    position="in-feed" 
                   />
                 )}
               </React.Fragment>

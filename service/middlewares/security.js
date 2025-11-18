@@ -21,10 +21,11 @@ export function telegramSecurity(request) {
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   
-  // 只允许 Telegram 相关的 CSP
+  // 允许 Telegram 和 Adsterra 广告的 CSP
+  // ⚠️ 对 Adsterra 使用宽松策略：允许所有 HTTPS 连接（广告网络通常使用多个域名）
   response.headers.set(
     'Content-Security-Policy', 
-    "default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org https://static.cloudflareinsights.com; connect-src 'self' https://*.telegram.org; img-src 'self' data: https:; style-src 'self' 'unsafe-inline';"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://telegram.org https://static.cloudflareinsights.com https://pl28074035.effectivegatecpm.com https://*.effectivegatecpm.com; connect-src 'self' https: wss:; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; frame-src 'self' https://*.effectivegatecpm.com;"
   )
   
   return response
