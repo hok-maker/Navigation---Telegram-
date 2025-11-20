@@ -317,6 +317,84 @@ export const batchDemoteChannels = withServerAction(async ({ usernames, percenta
 })
 
 /**
+ * 批量增加权重 Server Action
+ * 按照百分比或固定值增加权重
+ * 
+ * @param {Array<string>} usernames - 频道用户名数组
+ * @param {number} amount - 增加的数值
+ * @param {string} mode - 增加模式：'percentage'（百分比）或 'fixed'（固定值）
+ */
+export const batchPromoteChannels = withServerAction(async ({ usernames, amount, mode = 'percentage' }) => {
+  if (!Array.isArray(usernames) || usernames.length === 0) {
+    return error('未选择频道')
+  }
+  
+  if (amount <= 0) {
+    return error(mode === 'percentage' ? '增加百分比必须大于 0' : '增加值必须大于 0')
+  }
+  
+  if (mode === 'percentage' && amount > 1000) {
+    return error('增加百分比不能超过 1000%')
+  }
+  
+  await connectDB6()
+  
+  const results = {
+    success: [],
+    failed: []
+  }
+  
+  for (const username of usernames) {
+    try {
+      const channel = await db6.channels.findOne({ username })
+      
+      if (!channel) {
+        results.failed.push({ username, reason: '频道不存在' })
+        continue
+      }
+      
+      const originalWeight = channel.weight?.value || 0
+      let newWeight
+      
+      if (mode === 'percentage') {
+        // 百分比模式：增加 X%
+        newWeight = Math.floor(originalWeight * (100 + amount) / 100)
+      } else {
+        // 固定值模式：直接增加数值
+        newWeight = originalWeight + amount
+      }
+      
+      await db6.channels.updateOne(
+        { username },
+        {
+          $set: {
+            'weight.value': newWeight,
+            'weight.lastCalculated': new Date(),
+            'weight.calculationReason': mode === 'percentage' 
+              ? `管理员批量增加权重 ${amount}%`
+              : `管理员批量增加权重 +${amount}`,
+            updatedAt: new Date()
+          }
+        }
+      )
+      
+      results.success.push({ 
+        username, 
+        name: channel.name,
+        oldWeight: originalWeight,
+        newWeight: newWeight,
+        increased: newWeight - originalWeight
+      })
+      
+    } catch (error) {
+      results.failed.push({ username, reason: error.message })
+    }
+  }
+  
+  return success(results, `批量增加权重完成: 成功 ${results.success.length} 个，失败 ${results.failed.length} 个`)
+})
+
+/**
  * 批量恢复权重 Server Action
  * 恢复降权前的原始权重
  * 

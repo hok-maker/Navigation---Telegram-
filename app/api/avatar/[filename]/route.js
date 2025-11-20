@@ -28,7 +28,7 @@ export async function GET(request, { params }) {
             const allowed = await checkAPIRateLimit(clientIP, 'avatar');
             
             if (!allowed) {
-                console.log(`⛔ API限流: ${clientIP} (头像下载 100次/小时)`);
+                console.log(`⛔ API限流: ${clientIP} (头像下载 10000次/小时)`);
                 return new NextResponse(
                     JSON.stringify({
                         success: false,
@@ -39,6 +39,7 @@ export async function GET(request, { params }) {
                         status: 429,
                         headers: {
                             'Content-Type': 'application/json',
+                            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',  // ⭐ 禁止缓存429响应
                             'Retry-After': '3600'
                         }
                     }

@@ -57,10 +57,19 @@ const nextConfig = {
           source: '/about',
           destination: '/03-about',
         },
+        // 3. 管理后台路由 - /neoneo 重写到 /admin
+        {
+          source: '/neoneo',
+          destination: '/admin',
+        },
+        {
+          source: '/neoneo/:path*',
+          destination: '/admin/:path*',
+        },
       ],
       afterFiles: [
-        // 3. 频道分享页 - /:username 重写到 /02-channel-share/:username
-        // afterFiles 确保上面的具体路由（/, /about）优先匹配
+        // 4. 频道分享页 - /:username 重写到 /02-channel-share/:username
+        // afterFiles 确保上面的具体路由（/, /about, /neoneo）优先匹配
         {
           source: '/:username',
           destination: '/02-channel-share/:username',

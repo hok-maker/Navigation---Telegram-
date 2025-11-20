@@ -103,13 +103,13 @@ export default function AdminLayout({ children }) {
           
           {/* 导航菜单 */}
           <nav className={styles.nav}>
-            <a href="/admin" className={styles.navLink}>
+            <a href="/neoneo" className={styles.navLink}>
               📊 频道管理
             </a>
-            <a href="/admin/keywords" className={styles.navLink}>
+            <a href="/neoneo/keywords" className={styles.navLink}>
               🔻 降权关键词
             </a>
-            <a href="/admin/search-keywords" className={styles.navLink}>
+            <a href="/neoneo/search-keywords" className={styles.navLink}>
               🔍 搜索关键词
             </a>
           </nav>

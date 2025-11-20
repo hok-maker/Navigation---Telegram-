@@ -215,9 +215,9 @@ export default function ChannelCard({ channel }) {
             />
           ) : (
             /* ⭐ 默认头像：首字母 + 渐变色（无头像或加载失败时显示） */
-            <div className={styles.avatarPlaceholder} style={gradientStyle}>
-              {initial}
-            </div>
+          <div className={styles.avatarPlaceholder} style={gradientStyle}>
+            {initial}
+          </div>
           )}
         </div>
         <div className={styles.info}>

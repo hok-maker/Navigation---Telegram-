@@ -135,7 +135,21 @@ export async function checkPageAccessRateLimit(ip) {
 
 /**
  * API接口限流（防止批量下载资源）
- * 限制：每IP每小时最多100次API调用
+ * ⭐ Cloudflare Tunnel 优化版 - 宽松策略
+ * 
+ * 架构：Cloudflare CDN → Cloudflare Tunnel → 本地服务器
+ * 保护重点：本地磁盘 I/O（Cloudflare 会缓存成功响应，但首次请求仍需本地读取）
+ * 
+ * 设计哲学：
+ * - 不怕爬虫：Telegram 频道数据本就公开，爬虫换 IP 也挡不住
+ * - 只防攻击：防止恶意请求大量不存在的文件（绕过缓存，压垮磁盘）
+ * 
+ * 限制策略：
+ * - 每IP每小时最多 10000 次请求（非常宽松）
+ * - 正常用户：完全无感，不会触发限流
+ * - 恶意攻击：请求不存在的文件会被拦截（保护磁盘I/O）
+ * - Cloudflare缓存后，同一头像不会重复请求本地
+ * 
  * @param {string} ip - IP地址
  * @param {string} endpoint - API端点（如：avatar）
  * @returns {Promise<boolean>} true=允许访问，false=超过限制
@@ -143,8 +157,29 @@ export async function checkPageAccessRateLimit(ip) {
 export async function checkAPIRateLimit(ip, endpoint = 'api') {
   return await checkRateLimit(
     `ip:api:${endpoint}:${ip}`,
-    100,    // 100次
-    3600    // 1小时
+    10000,    // 10000次/小时（宽松策略：只防极端攻击）
+    3600      // 1小时
+  )
+}
+
+/**
+ * 头像API短期限流（防止瞬间大量请求）
+ * ⭐ 配合 checkAPIRateLimit 使用，双重保护
+ * 
+ * 设计哲学：宽松策略，只防极端瞬间攻击
+ * 
+ * 限制：每IP每分钟最多 1000 次头像请求
+ * 场景：防止瞬间脚本攻击，允许任何正常浏览行为
+ * 计算：每次滚动 20 个头像，1000 次 = 允许连续滚动 50 次
+ * 
+ * @param {string} ip - IP地址
+ * @returns {Promise<boolean>} true=允许访问，false=超过限制
+ */
+export async function checkAvatarBurstLimit(ip) {
+  return await checkRateLimit(
+    `ip:avatar:burst:${ip}`,
+    1000,  // 1000次/分钟（宽松策略：只防极端攻击）
+    60     // 1分钟
   )
 }
 

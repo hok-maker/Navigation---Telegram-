@@ -7,6 +7,7 @@ import AdminChannelCard from './components/AdminChannelCard'
 import EditDialog from './components/EditDialog'
 import AddChannelDialog from './components/AddChannelDialog'  // ⭐ 添加频道对话框
 import BatchDemoteDialog from './components/BatchDemoteDialog'  // ⭐ 批量降权对话框
+import BatchPromoteDialog from './components/BatchPromoteDialog'  // ⭐ 批量增加权重对话框
 import styles from './page.module.css'
 
 export default function AdminPage() {
@@ -23,6 +24,7 @@ export default function AdminPage() {
   const [editingChannel, setEditingChannel] = useState(null)
   const [showAddDialog, setShowAddDialog] = useState(false)  // ⭐ 添加频道对话框状态
   const [showBatchDemoteDialog, setShowBatchDemoteDialog] = useState(false)  // ⭐ 批量降权对话框状态
+  const [showBatchPromoteDialog, setShowBatchPromoteDialog] = useState(false)  // ⭐ 批量增加权重对话框状态
   const [selectionMode, setSelectionMode] = useState(false)  // ⭐ 多选模式
   const [selectedChannels, setSelectedChannels] = useState([])  // ⭐ 选中的频道
   const [page, setPage] = useState(1)
@@ -44,7 +46,7 @@ export default function AdminPage() {
     }
     
     // 更新 URL（不刷新页面）
-    const newURL = params.toString() ? `/admin?${params.toString()}` : '/admin'
+    const newURL = params.toString() ? `/neoneo?${params.toString()}` : '/neoneo'
     router.push(newURL, { scroll: false })  // scroll: false 保持滚动位置
   }
 
@@ -183,6 +185,14 @@ export default function AdminPage() {
     setSelectionMode(false)
     loadChannels(1, searchKeyword, sortBy)
   }
+  
+  // ⭐ 批量增加权重成功后刷新
+  const handleBatchPromoteSuccess = () => {
+    setShowBatchPromoteDialog(false)
+    setSelectedChannels([])
+    setSelectionMode(false)
+    loadChannels(1, searchKeyword, sortBy)
+  }
 
   return (
     <div className={styles.container}>
@@ -292,6 +302,13 @@ export default function AdminPage() {
           </div>
           
           <div className={styles.batchActions}>
+            <button 
+              onClick={() => setShowBatchPromoteDialog(true)}
+              disabled={selectedChannels.length === 0}
+              className={styles.promoteButton}
+            >
+              ⬆️ 批量增加权重
+            </button>
             <button 
               onClick={() => setShowBatchDemoteDialog(true)}
               disabled={selectedChannels.length === 0}
@@ -403,6 +420,15 @@ export default function AdminPage() {
           selectedChannels={selectedChannels}
           onClose={() => setShowBatchDemoteDialog(false)}
           onSuccess={handleBatchDemoteSuccess}
+        />
+      )}
+      
+      {/* ⭐ 批量增加权重对话框 */}
+      {showBatchPromoteDialog && (
+        <BatchPromoteDialog
+          selectedChannels={selectedChannels}
+          onClose={() => setShowBatchPromoteDialog(false)}
+          onSuccess={handleBatchPromoteSuccess}
         />
       )}
     </div>

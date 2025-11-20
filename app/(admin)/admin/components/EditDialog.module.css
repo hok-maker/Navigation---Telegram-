@@ -637,6 +637,80 @@
   color: #667eea;
 }
 
+/* ⭐ 批量增加权重对话框样式 */
+.newWeightPromote {
+  font-weight: 600;
+  color: #10b981;
+}
+
+.diffPromote {
+  font-size: 12px;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.modeSelector {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.modeButton {
+  flex: 1;
+  padding: 12px;
+  background: #f3f4f6;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modeButton:hover {
+  background: #e5e7eb;
+}
+
+.modeButtonActive {
+  background: white;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.manualInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.numberInput {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.numberInput:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.unit {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.weightInfo {
+  font-size: 12px;
+  color: #10b981;
+}
+
 .diff {
   font-size: 12px;
   color: #ef4444;

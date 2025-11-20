@@ -45,10 +45,11 @@ export {
   checkSearchRateLimit,    // 搜索限流
   checkAdminRateLimit,     // 管理员限流
   getRemainingQuota,       // 获取剩余配额
-  // ⭐ IP限流（防爬虫）
+  // ⭐ IP限流（只防攻击，不防爬虫）
   checkGlobalIPRateLimit,  // 全局IP限流
   checkPageAccessRateLimit, // 页面访问限流
-  checkAPIRateLimit,       // API限流
+  checkAPIRateLimit,       // API限流（长期：10000次/小时）- 宽松策略
+  checkAvatarBurstLimit,   // 头像短期限流（1000次/分钟）- 可选
   getClientIP,             // 获取客户端IP
 } from './security/rateLimiter.js'
 
