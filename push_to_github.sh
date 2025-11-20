@@ -55,7 +55,15 @@ git commit -m "$commit_msg"
 echo ""
 echo "推送到 GitHub..."
 git branch -M main
-git push -u origin main
+
+# ⭐ 从环境变量读取 Token（避免在代码中暴露）
+if [ -z "$GITHUB_TOKEN" ]; then
+    echo "❌ 未设置 GITHUB_TOKEN 环境变量"
+    echo "请执行: export GITHUB_TOKEN=your_token"
+    exit 1
+fi
+
+git push https://${GITHUB_TOKEN}@github.com/hok-maker/Navigation---Telegram-.git main
 
 echo ""
 echo "✅ 推送完成！"
