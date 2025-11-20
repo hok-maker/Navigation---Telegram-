@@ -116,6 +116,24 @@
   background: #059669;
 }
 
+/* ⭐ 批量语言降权按钮 */
+.languageDemoteButton {
+  padding: 10px 24px;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.languageDemoteButton:hover {
+  background: #7c3aed;
+}
+
 .checkbox {
   display: flex;
   align-items: center;
