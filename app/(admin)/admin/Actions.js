@@ -244,8 +244,13 @@ export const toggleChannelStatus = withServerAction(async (username) => {
 })
 
 /**
- * 批量降权 Server Action
+ * 批量降权 Server Action - ⭐ 支持多次降权
  * 按照百分比降低权重
+ * 
+ * 改进：
+ * - 允许多次降权（每次基于当前权重）
+ * - 保留完整的降权历史记录
+ * - 记录最初的原始权重（用于恢复）
  * 
  * @param {Array<string>} usernames - 频道用户名数组
  * @param {number} percentage - 降权百分比 (0-100)，如 50 表示降低 50%
@@ -263,8 +268,7 @@ export const batchDemoteChannels = withServerAction(async ({ usernames, percenta
   
   const results = {
     success: [],
-    failed: [],
-    skipped: []
+    failed: []
   }
   
   for (const username of usernames) {
@@ -276,27 +280,37 @@ export const batchDemoteChannels = withServerAction(async ({ usernames, percenta
         continue
       }
       
-      // 如果已经降权过，跳过
-      if (channel.weight?.demoted === true) {
-        results.skipped.push({ username, reason: '已降权过' })
-        continue
-      }
+      const currentWeight = channel.weight?.value || 0
+      const demotedWeight = Math.floor(currentWeight * (100 - percentage) / 100)
       
-      const originalWeight = channel.weight?.value || 0
-      const demotedWeight = Math.floor(originalWeight * (100 - percentage) / 100)
+      // ⭐ 首次降权：记录原始权重
+      const isFirstDemote = !channel.weight?.demoted
+      const originalWeight = isFirstDemote ? currentWeight : (channel.weight?.originalWeight || currentWeight)
       
+      // ⭐ 构建降权历史记录
+      const demoteHistory = channel.weight?.demoteHistory || []
+      demoteHistory.push({
+        percentage,
+        method: 'admin_batch',
+        appliedAt: new Date(),
+        beforeWeight: currentWeight,
+        afterWeight: demotedWeight
+      })
+      
+      // ⭐ 更新数据库
       await db6.channels.updateOne(
         { username },
         {
           $set: {
-            'weight.beforeDemote': originalWeight,
-            'weight.value': demotedWeight,
-            'weight.demoted': true,
-            'weight.demoteConfig': {
-              percentage,
-              method: 'admin_batch',
-              appliedAt: new Date()
-            }
+            'weight.originalWeight': originalWeight,  // 最初的权重（只在首次设置）
+            'weight.value': demotedWeight,            // 降权后的新权重
+            'weight.demoted': true,                   // 标记为已降权
+            'weight.demoteHistory': demoteHistory,    // 完整的降权历史
+            'weight.lastDemoteAt': new Date(),        // 最后降权时间
+            'weight.demoteCount': demoteHistory.length,  // 降权次数
+            'weight.lastCalculated': new Date(),
+            'weight.calculationReason': `管理员批量降权 ${percentage}% (第${demoteHistory.length}次)`,
+            updatedAt: new Date()
           }
         }
       )
@@ -304,8 +318,10 @@ export const batchDemoteChannels = withServerAction(async ({ usernames, percenta
       results.success.push({ 
         username, 
         name: channel.name,
-        oldWeight: originalWeight,
-        newWeight: demotedWeight 
+        oldWeight: currentWeight,
+        newWeight: demotedWeight,
+        demoteCount: demoteHistory.length,
+        isFirstDemote
       })
       
     } catch (error) {
@@ -313,7 +329,7 @@ export const batchDemoteChannels = withServerAction(async ({ usernames, percenta
     }
   }
   
-  return success(results, `批量降权完成: 成功 ${results.success.length} 个，跳过 ${results.skipped.length} 个，失败 ${results.failed.length} 个`)
+  return success(results, `批量降权完成: 成功 ${results.success.length} 个，失败 ${results.failed.length} 个`)
 })
 
 /**
@@ -395,8 +411,13 @@ export const batchPromoteChannels = withServerAction(async ({ usernames, amount,
 })
 
 /**
- * 批量恢复权重 Server Action
- * 恢复降权前的原始权重
+ * 批量恢复权重 Server Action - ⭐ 恢复到最初的原始权重
+ * 一次性清除所有降权记录，恢复到最初状态
+ * 
+ * 改进：
+ * - 恢复到最初的原始权重（而非最近一次降权前的权重）
+ * - 清除所有降权历史
+ * - 记录恢复信息
  * 
  * @param {Array<string>} usernames - 频道用户名数组
  */
@@ -428,18 +449,29 @@ export const batchRestoreChannels = withServerAction(async ({ usernames }) => {
         continue
       }
       
-      const originalWeight = channel.weight?.beforeDemote || channel.weight?.value || 0
+      // ⭐ 获取最初的原始权重
+      const originalWeight = channel.weight?.originalWeight || channel.weight?.beforeDemote || channel.weight?.value || 0
+      const currentWeight = channel.weight?.value || 0
+      const demoteCount = channel.weight?.demoteCount || 0
       
+      // ⭐ 清除所有降权记录，恢复到最初状态
       await db6.channels.updateOne(
         { username },
         {
           $set: {
-            'weight.value': originalWeight
+            'weight.value': originalWeight,
+            'weight.lastCalculated': new Date(),
+            'weight.calculationReason': `管理员恢复权重（清除${demoteCount}次降权）`,
+            updatedAt: new Date()
           },
           $unset: {
+            'weight.originalWeight': '',
             'weight.beforeDemote': '',
             'weight.demoted': '',
-            'weight.demoteConfig': ''
+            'weight.demoteConfig': '',
+            'weight.demoteHistory': '',
+            'weight.lastDemoteAt': '',
+            'weight.demoteCount': ''
           }
         }
       )
@@ -447,7 +479,9 @@ export const batchRestoreChannels = withServerAction(async ({ usernames }) => {
       results.success.push({ 
         username,
         name: channel.name,
-        restoredWeight: originalWeight
+        restoredWeight: originalWeight,
+        beforeRestoreWeight: currentWeight,
+        clearedDemoteCount: demoteCount
       })
       
     } catch (error) {

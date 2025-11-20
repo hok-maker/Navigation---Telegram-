@@ -31,7 +31,7 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
     return Math.floor(originalWeight * (100 - percentage) / 100)
   }
   
-  // 处理降权
+  // 处理降权 - ⭐ 支持多次降权
   const handleDemote = async () => {
     setLoading(true)
     setResult(null)
@@ -43,8 +43,8 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
       if (response.success) {
         setResult(response.data)
         
-        // 如果全部成功，2秒后自动关闭
-        if (response.data.failed.length === 0 && response.data.skipped.length === 0) {
+        // ⭐ 如果全部成功，2秒后自动关闭（不再检查 skipped）
+        if (response.data.failed.length === 0) {
           setTimeout(() => {
             onSuccess()
           }, 2000)
@@ -87,9 +87,10 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
     }
   }
   
-  // 筛选：哪些频道已降权
+  // 筛选：哪些频道已降权（只用于恢复功能）
   const demotedChannels = selectedChannels.filter(ch => ch.weight?.demoted === true)
-  const notDemotedChannels = selectedChannels.filter(ch => ch.weight?.demoted !== true)
+  // ⭐ 所有频道都可以降权（支持多次降权）
+  const allChannels = selectedChannels
   
   return (
     <div className={styles.overlay} onClick={onClose}>
@@ -105,7 +106,7 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
             className={`${styles.tab} ${activeTab === 'demote' ? styles.activeTab : ''}`}
             onClick={() => setActiveTab('demote')}
           >
-            ⬇️ 批量降权 ({notDemotedChannels.length})
+            ⬇️ 批量降权 ({allChannels.length}) {/* ⭐ 支持多次降权 */}
           </button>
           <button 
             className={`${styles.tab} ${activeTab === 'restore' ? styles.activeTab : ''}`}
@@ -142,41 +143,45 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
                 </div>
               </div>
               
-              {/* 预览列表 */}
+              {/* 预览列表 - ⭐ 支持多次降权 */}
               <div className={styles.previewSection}>
-                <h3>预览效果（共 {notDemotedChannels.length} 个）</h3>
-                {notDemotedChannels.length === 0 ? (
-                  <div className={styles.emptyState}>
-                    ⚠️ 选中的频道都已降权过，请切换到"批量恢复"
-                  </div>
-                ) : (
-                  <div className={styles.previewList}>
-                    {notDemotedChannels.slice(0, 10).map(channel => {
-                      const oldWeight = channel.weight?.value || 0
-                      const newWeight = getEstimatedWeight(channel)
-                      
-                      return (
-                        <div key={channel.username} className={styles.previewItem}>
-                          <div className={styles.channelInfo}>
-                            <strong>{channel.name || channel.username}</strong>
-                            <span className={styles.username}>@{channel.username}</span>
-                          </div>
-                          <div className={styles.weightChange}>
-                            <span className={styles.oldWeight}>{formatWeight(oldWeight)}</span>
-                            <span className={styles.arrow}>→</span>
-                            <span className={styles.newWeight}>{formatWeight(newWeight)}</span>
-                            <span className={styles.diff}>(-{percentage}%)</span>
-                          </div>
+                <h3>预览效果（共 {allChannels.length} 个）</h3>
+                <div className={styles.previewList}>
+                  {allChannels.slice(0, 10).map(channel => {
+                    const oldWeight = channel.weight?.value || 0
+                    const newWeight = getEstimatedWeight(channel)
+                    const demoteCount = channel.weight?.demoteCount || 0
+                    const isDemoted = channel.weight?.demoted === true
+                    
+                    return (
+                      <div key={channel.username} className={styles.previewItem}>
+                        <div className={styles.channelInfo}>
+                          <strong>{channel.name || channel.username}</strong>
+                          <span className={styles.username}>@{channel.username}</span>
+                          {/* ⭐ 显示降权次数 */}
+                          {isDemoted && (
+                            <span className={styles.demoteCountBadge}>
+                              已降权 {demoteCount} 次
+                            </span>
+                          )}
                         </div>
-                      )
-                    })}
-                    {notDemotedChannels.length > 10 && (
-                      <div className={styles.moreHint}>
-                        ... 还有 {notDemotedChannels.length - 10} 个频道
+                        <div className={styles.weightChange}>
+                          <span className={styles.oldWeight}>{formatWeight(oldWeight)}</span>
+                          <span className={styles.arrow}>→</span>
+                          <span className={styles.newWeight}>{formatWeight(newWeight)}</span>
+                          <span className={styles.diff}>
+                            (-{percentage}%) {isDemoted && `[第${demoteCount + 1}次]`}
+                          </span>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                )}
+                    )
+                  })}
+                  {allChannels.length > 10 && (
+                    <div className={styles.moreHint}>
+                      ... 还有 {allChannels.length - 10} 个频道
+                    </div>
+                  )}
+                </div>
               </div>
             </>
           )}
@@ -237,7 +242,7 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
                     ✅ 成功: {result.success.length} 个
                   </div>
                 )}
-                {result.skipped.length > 0 && (
+                {result.skipped && result.skipped.length > 0 && (
                   <div className={styles.warningSummary}>
                     ⚠️ 跳过: {result.skipped.length} 个
                   </div>
@@ -257,6 +262,12 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
                     {result.success.slice(0, 5).map((item, idx) => (
                       <li key={idx}>
                         @{item.username} {item.name && `(${item.name})`}
+                        {/* ⭐ 显示降权次数（如果有） */}
+                        {item.demoteCount && activeTab === 'demote' && (
+                          <span className={styles.demoteCountInfo}>
+                            {' '}[第{item.demoteCount}次降权]
+                          </span>
+                        )}
                       </li>
                     ))}
                     {result.success.length > 5 && (
@@ -266,7 +277,7 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
                 </div>
               )}
               
-              {result.skipped.length > 0 && (
+              {result.skipped && result.skipped.length > 0 && (
                 <div className={styles.resultDetail}>
                   <div className={styles.resultTitle}>⚠️ 跳过:</div>
                   <ul className={styles.resultList}>
@@ -303,9 +314,9 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
             <button 
               className={styles.saveButton} 
               onClick={handleDemote}
-              disabled={loading || notDemotedChannels.length === 0}
+              disabled={loading || allChannels.length === 0}
             >
-              {loading ? '处理中...' : `确认降权 ${notDemotedChannels.length} 个频道`}
+              {loading ? '处理中...' : `确认降权 ${allChannels.length} 个频道`}
             </button>
           )}
           {activeTab === 'restore' && (
