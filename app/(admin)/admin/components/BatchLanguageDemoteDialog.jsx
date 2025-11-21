@@ -99,11 +99,15 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
       return
     }
     
+    const channelCount = selectedLanguage.count.toLocaleString()
+    
     if (!window.confirm(
-      `确定要对所有「${getLanguageName(selectedLanguage.code)}」频道降权 ${demotePercent}% 吗？\n\n` +
-      `影响范围：${selectedLanguage.count} 个频道\n` +
-      `总权重：${formatNumber(selectedLanguage.totalWeight)}\n\n` +
-      `降权后权重将变为原来的 ${100 - demotePercent}%`
+      `⚠️ 确定要对所有「${getLanguageName(selectedLanguage.code)}」频道降权 ${demotePercent}% 吗？\n\n` +
+      `📊 影响范围：${channelCount} 个频道\n` +
+      `⭐ 总权重：${formatNumber(selectedLanguage.totalWeight)}\n` +
+      `👥 总订阅：${formatNumber(selectedLanguage.totalMembers)}\n\n` +
+      `📉 降权后权重将变为原来的 ${100 - demotePercent}%\n\n` +
+      `⏱️ 批量处理中请耐心等待（约${Math.ceil(selectedLanguage.count / 1000)}秒）...`
     )) {
       return
     }
@@ -120,26 +124,65 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
       if (response.success) {
         setResult(response.data)
         
-        // 2秒后自动关闭并刷新
+        // 3秒后自动关闭并刷新
         setTimeout(() => {
           onSuccess()
-        }, 2000)
+        }, 3000)
       } else {
-        alert('操作失败: ' + response.error)
+        alert('❌ 操作失败: ' + response.error)
+        setProcessing(false)
       }
     } catch (error) {
-      alert('操作失败: ' + error.message)
-    } finally {
+      alert('❌ 操作失败: ' + error.message)
       setProcessing(false)
     }
   }
   
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.dialog} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '700px' }}>
+    <>
+      <style jsx>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+      
+      <div className={styles.overlay} onClick={processing ? null : onClose}>
+        <div className={styles.dialog} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '700px', position: 'relative' }}>
+          {/* 处理中遮罩 */}
+          {processing && (
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(255, 255, 255, 0.95)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 1000,
+              borderRadius: '12px'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px', animation: 'spin 2s linear infinite' }}>
+                ⚙️
+              </div>
+            <div style={{ fontSize: '18px', fontWeight: '600', color: '#667eea', marginBottom: '8px' }}>
+              正在批量处理中...
+            </div>
+            <div style={{ fontSize: '14px', color: '#666' }}>
+              {selectedLanguage && `正在更新 ${selectedLanguage.count.toLocaleString()} 个频道`}
+            </div>
+            <div style={{ fontSize: '13px', color: '#999', marginTop: '12px' }}>
+              请勿关闭页面，预计需要 {selectedLanguage && Math.ceil(selectedLanguage.count / 1000)} 秒
+            </div>
+          </div>
+        )}
+        
         <div className={styles.header}>
           <h2>🌍 批量语言降权</h2>
-          <button className={styles.closeButton} onClick={onClose}>✕</button>
+          <button className={styles.closeButton} onClick={onClose} disabled={processing}>✕</button>
         </div>
         
         <div className={styles.body}>
@@ -189,7 +232,7 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
                             {getLanguageName(lang.code)}
                           </div>
                           <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-                            {lang.count} 个频道 · 总权重 {formatNumber(lang.totalWeight)}
+                            {lang.count.toLocaleString()} 个频道 · 总权重 {formatNumber(lang.totalWeight)} · {formatNumber(lang.totalMembers)} 订阅
                           </div>
                         </div>
                       </div>
@@ -245,7 +288,7 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
                       <div>
                         <div style={{ color: '#666' }}>影响频道数：</div>
                         <div style={{ fontWeight: '600', fontSize: '16px', color: '#667eea' }}>
-                          {selectedLanguage.count} 个
+                          {selectedLanguage.count.toLocaleString()} 个
                         </div>
                       </div>
                       <div>
@@ -266,6 +309,18 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
                           {formatNumber(selectedLanguage.totalWeight * (100 - demotePercent) / 100)}
                         </div>
                       </div>
+                      <div>
+                        <div style={{ color: '#666' }}>总订阅数：</div>
+                        <div style={{ fontWeight: '600', fontSize: '16px' }}>
+                          {formatNumber(selectedLanguage.totalMembers)}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ color: '#666' }}>预计耗时：</div>
+                        <div style={{ fontWeight: '600', fontSize: '16px', color: '#e36209' }}>
+                          约 {Math.ceil(selectedLanguage.count / 1000)} 秒
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </>
@@ -281,11 +336,16 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
                   marginTop: '16px',
                   color: '#155724'
                 }}>
-                  <div style={{ fontWeight: '600', marginBottom: '8px' }}>
+                  <div style={{ fontWeight: '600', marginBottom: '12px', fontSize: '16px' }}>
                     ✅ 批量降权完成！
                   </div>
-                  <div style={{ fontSize: '14px' }}>
-                    成功处理：{result.updated} 个频道
+                  <div style={{ fontSize: '14px', lineHeight: '1.8' }}>
+                    <div>🎯 语言类型：{getLanguageName(result.languageCode)}</div>
+                    <div>📊 处理频道：{result.updated?.toLocaleString()} / {result.total?.toLocaleString()} 个</div>
+                    <div>📉 降权比例：{result.demotePercent}%（保留 {100 - result.demotePercent}%）</div>
+                    <div style={{ marginTop: '8px', color: '#0c5460', fontSize: '13px' }}>
+                      💡 页面将在 3 秒后自动刷新...
+                    </div>
                   </div>
                 </div>
               )}
@@ -305,12 +365,24 @@ export default function BatchLanguageDemoteDialog({ onClose, onSuccess }) {
             className={styles.submitButton}
             onClick={handleDemote}
             disabled={!selectedLanguage || processing || loading}
+            style={{
+              position: 'relative',
+              overflow: 'hidden'
+            }}
           >
-            {processing ? '⏳ 处理中...' : '🌍 批量降权'}
+            {processing ? (
+              <>
+                ⏳ 批量处理中... 
+                {selectedLanguage && ` (${selectedLanguage.count.toLocaleString()}个)`}
+              </>
+            ) : (
+              '🌍 批量降权'
+            )}
           </button>
         </div>
       </div>
     </div>
+    </>
   )
 }
 

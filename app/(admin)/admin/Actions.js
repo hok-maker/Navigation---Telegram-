@@ -790,3 +790,165 @@ export const searchAdminChannels = withServerAction(async ({
   }, '搜索完成')
 })
 
+/**
+ * 获取语言统计信息
+ * 分析所有频道的语言分布
+ */
+export const getLanguageStatistics = withServerAction(async () => {
+  await connectDB6()
+  
+  // 检测字符串是否包含中文
+  const hasChinese = (str) => {
+    if (!str) return false
+    return /[\u4e00-\u9fa5]/.test(str)
+  }
+  
+  // 检测语言类型（简化版）
+  const detectLanguage = (name) => {
+    if (!name) return 'other'
+    
+    // 中文
+    if (hasChinese(name)) return 'zh'
+    
+    // 俄文（西里尔字母）
+    if (/[\u0400-\u04FF]/.test(name)) return 'ru'
+    
+    // 阿拉伯文
+    if (/[\u0600-\u06FF]/.test(name)) return 'ar'
+    
+    // 日文（假名）
+    if (/[\u3040-\u309F\u30A0-\u30FF]/.test(name)) return 'ja'
+    
+    // 韩文
+    if (/[\uAC00-\uD7AF]/.test(name)) return 'ko'
+    
+    // 泰文
+    if (/[\u0E00-\u0E7F]/.test(name)) return 'th'
+    
+    // 越南文（带声调的拉丁字母）
+    if (/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(name)) return 'vi'
+    
+    // 默认为英文（拉丁字母）
+    return 'en'
+  }
+  
+  // 获取所有频道
+  const allChannels = await db6.channels.find({}).toArray()
+  
+  // 按语言分组统计
+  const languageStats = {}
+  
+  allChannels.forEach(channel => {
+    const lang = detectLanguage(channel.name)
+    
+    if (!languageStats[lang]) {
+      languageStats[lang] = {
+        code: lang,
+        count: 0,
+        totalWeight: 0,
+        totalMembers: 0,
+        channels: []
+      }
+    }
+    
+    languageStats[lang].count++
+    languageStats[lang].totalWeight += channel.weight?.value || 0
+    languageStats[lang].totalMembers += channel.stats?.members || 0
+    languageStats[lang].channels.push(channel.username)
+  })
+  
+  // 转换为数组并排序（按频道数量降序）
+  const languages = Object.values(languageStats)
+    .sort((a, b) => b.count - a.count)
+  
+  return success({
+    languages,
+    total: allChannels.length
+  }, '语言统计完成')
+})
+
+/**
+ * 批量语言降权
+ * 根据语言类型，批量降低该语言所有频道的权重
+ */
+export const batchLanguageDemote = withServerAction(async ({ 
+  languageCode,  // 语言代码（如 'en', 'ru', 'ja'）
+  demotePercent  // 降权百分比（如 90 表示降权90%，保留10%）
+}) => {
+  await connectDB6()
+  
+  // 检测字符串是否包含中文
+  const hasChinese = (str) => {
+    if (!str) return false
+    return /[\u4e00-\u9fa5]/.test(str)
+  }
+  
+  // 检测语言类型
+  const detectLanguage = (name) => {
+    if (!name) return 'other'
+    if (hasChinese(name)) return 'zh'
+    if (/[\u0400-\u04FF]/.test(name)) return 'ru'
+    if (/[\u0600-\u06FF]/.test(name)) return 'ar'
+    if (/[\u3040-\u309F\u30A0-\u30FF]/.test(name)) return 'ja'
+    if (/[\uAC00-\uD7AF]/.test(name)) return 'ko'
+    if (/[\u0E00-\u0E7F]/.test(name)) return 'th'
+    if (/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(name)) return 'vi'
+    return 'en'
+  }
+  
+  // 获取所有频道
+  const allChannels = await db6.channels.find({}).toArray()
+  
+  // 筛选出指定语言的频道
+  const targetChannels = allChannels.filter(channel => {
+    return detectLanguage(channel.name) === languageCode
+  })
+  
+  if (targetChannels.length === 0) {
+    return error('未找到该语言的频道')
+  }
+  
+  // 计算降权系数
+  const demoteFactor = (100 - demotePercent) / 100  // 例如：降权90% → 系数0.1
+  
+  // ⭐ 使用 bulkWrite 批量更新（分批处理，避免超时）
+  const batchSize = 1000  // 每批处理1000个
+  let updated = 0
+  
+  // 准备批量更新操作
+  const bulkOps = targetChannels.map(channel => {
+    const oldWeight = channel.weight?.value || 0
+    const newWeight = Math.floor(oldWeight * demoteFactor)
+    
+    return {
+      updateOne: {
+        filter: { username: channel.username },
+        update: { 
+          $set: { 
+            'weight.value': newWeight,
+            'weight.lastUpdated': new Date(),
+            'weight.demoted': true,
+            'weight.demoteReason': `语言降权${demotePercent}%`,
+            'meta.lastModified': new Date()
+          } 
+        }
+      }
+    }
+  })
+  
+  // 分批执行批量更新
+  for (let i = 0; i < bulkOps.length; i += batchSize) {
+    const batch = bulkOps.slice(i, i + batchSize)
+    const result = await db6.channels.bulkWrite(batch, { ordered: false })
+    updated += result.modifiedCount
+  }
+  
+  return success({
+    updated,
+    total: targetChannels.length,
+    languageCode,
+    demotePercent,
+    demoteFactor
+  }, `成功降权 ${updated} 个频道`)
+})
+
