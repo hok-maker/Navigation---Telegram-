@@ -8,7 +8,6 @@ import EditDialog from './components/EditDialog'
 import AddChannelDialog from './components/AddChannelDialog'  // ⭐ 添加频道对话框
 import BatchDemoteDialog from './components/BatchDemoteDialog'  // ⭐ 批量降权对话框
 import BatchPromoteDialog from './components/BatchPromoteDialog'  // ⭐ 批量增加权重对话框
-import BatchLanguageDemoteDialog from './components/BatchLanguageDemoteDialog'  // ⭐ 批量语言降权对话框
 import styles from './page.module.css'
 
 export default function AdminPage() {
@@ -26,7 +25,6 @@ export default function AdminPage() {
   const [showAddDialog, setShowAddDialog] = useState(false)  // ⭐ 添加频道对话框状态
   const [showBatchDemoteDialog, setShowBatchDemoteDialog] = useState(false)  // ⭐ 批量降权对话框状态
   const [showBatchPromoteDialog, setShowBatchPromoteDialog] = useState(false)  // ⭐ 批量增加权重对话框状态
-  const [showLanguageDemoteDialog, setShowLanguageDemoteDialog] = useState(false)  // ⭐ 批量语言降权对话框状态
   const [selectionMode, setSelectionMode] = useState(false)  // ⭐ 多选模式
   const [selectedChannels, setSelectedChannels] = useState([])  // ⭐ 选中的频道
   const [page, setPage] = useState(1)
@@ -253,15 +251,6 @@ export default function AdminPage() {
         >
           ➕ 添加频道
         </button>
-        
-        {/* ⭐ 批量语言降权按钮 */}
-        <button 
-          onClick={() => setShowLanguageDemoteDialog(true)}
-          className={styles.languageDemoteButton}
-          title="根据语言类型批量降权"
-        >
-          🌍 语言降权
-        </button>
 
         {/* ⭐ 排序选择器 */}
         <div className={styles.sortSelector}>
@@ -440,17 +429,6 @@ export default function AdminPage() {
           selectedChannels={selectedChannels}
           onClose={() => setShowBatchPromoteDialog(false)}
           onSuccess={handleBatchPromoteSuccess}
-        />
-      )}
-      
-      {/* ⭐ 批量语言降权对话框 */}
-      {showLanguageDemoteDialog && (
-        <BatchLanguageDemoteDialog
-          onClose={() => setShowLanguageDemoteDialog(false)}
-          onSuccess={() => {
-            setShowLanguageDemoteDialog(false)
-            loadChannels(1, searchKeyword, sortBy)
-          }}
         />
       )}
     </div>

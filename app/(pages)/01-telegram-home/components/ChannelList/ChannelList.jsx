@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 import ChannelCard from '../ChannelCard';
 import SearchBar from '../SearchBar';
-import { NativeAdCard } from '@/app/components/Ads';
+// import { NativeAdCard } from '@/app/components/Ads'; // ⭐ 广告已关闭
 import { getChannelsData, searchChannels } from '../../Actions';
 import styles from './ChannelList.module.css';
 
@@ -164,13 +164,13 @@ export default function ChannelList({
                 {/* 频道卡片 */}
                 <ChannelCard channel={channel} />
                 
-                {/* ⭐ 每17个频道插入1个原生广告（使用唯一 ID） */}
-                {(index + 1) % 17 === 0 && (
+                {/* ⭐ 广告已关闭（影响运营） - 如需重新启用，取消注释以下代码 */}
+                {/* {(index + 1) % 17 === 0 && (
                   <NativeAdCard 
                     adId={`ad-${Math.floor((index + 1) / 17)}`} 
                     position="in-feed" 
                   />
-                )}
+                )} */}
               </React.Fragment>
             ))}
           </div>

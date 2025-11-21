@@ -63,6 +63,11 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="theme-color" content="#667eea" />
         <link rel="canonical" href={siteConfig.url} />
+        
+        {/* Google AdSense 所有者验证 如果需要更换域名请修改中间内容 */}
+        <meta name="google-adsense-account" content="ca-pub-2556789402231081" />
+        {/* Google AdSense 所有者验证 如果需要更换域名请修改中间内容 */}
+        
         {/* Coinzilla 所有者验证 如果需要更换域名请修改中间内容 */}
         <meta name="coinzilla" content="16ca70e1364cb462df3c6ded1f12225c" />
         {/* Coinzilla 所有者验证 如果需要更换域名请修改中间内容 */}
