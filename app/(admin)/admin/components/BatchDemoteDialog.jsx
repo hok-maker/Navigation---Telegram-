@@ -146,42 +146,42 @@ export default function BatchDemoteDialog({ selectedChannels, onClose, onSuccess
               {/* 预览列表 - ⭐ 支持多次降权 */}
               <div className={styles.previewSection}>
                 <h3>预览效果（共 {allChannels.length} 个）</h3>
-                <div className={styles.previewList}>
+                  <div className={styles.previewList}>
                   {allChannels.slice(0, 10).map(channel => {
-                    const oldWeight = channel.weight?.value || 0
-                    const newWeight = getEstimatedWeight(channel)
+                      const oldWeight = channel.weight?.value || 0
+                      const newWeight = getEstimatedWeight(channel)
                     const demoteCount = channel.weight?.demoteCount || 0
                     const isDemoted = channel.weight?.demoted === true
-                    
-                    return (
-                      <div key={channel.username} className={styles.previewItem}>
-                        <div className={styles.channelInfo}>
-                          <strong>{channel.name || channel.username}</strong>
-                          <span className={styles.username}>@{channel.username}</span>
+                      
+                      return (
+                        <div key={channel.username} className={styles.previewItem}>
+                          <div className={styles.channelInfo}>
+                            <strong>{channel.name || channel.username}</strong>
+                            <span className={styles.username}>@{channel.username}</span>
                           {/* ⭐ 显示降权次数 */}
                           {isDemoted && (
                             <span className={styles.demoteCountBadge}>
                               已降权 {demoteCount} 次
                             </span>
                           )}
-                        </div>
-                        <div className={styles.weightChange}>
-                          <span className={styles.oldWeight}>{formatWeight(oldWeight)}</span>
-                          <span className={styles.arrow}>→</span>
-                          <span className={styles.newWeight}>{formatWeight(newWeight)}</span>
+                          </div>
+                          <div className={styles.weightChange}>
+                            <span className={styles.oldWeight}>{formatWeight(oldWeight)}</span>
+                            <span className={styles.arrow}>→</span>
+                            <span className={styles.newWeight}>{formatWeight(newWeight)}</span>
                           <span className={styles.diff}>
                             (-{percentage}%) {isDemoted && `[第${demoteCount + 1}次]`}
                           </span>
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
                   {allChannels.length > 10 && (
-                    <div className={styles.moreHint}>
+                      <div className={styles.moreHint}>
                       ... 还有 {allChannels.length - 10} 个频道
-                    </div>
-                  )}
-                </div>
+                      </div>
+                    )}
+                  </div>
               </div>
             </>
           )}
